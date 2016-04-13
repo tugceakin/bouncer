@@ -24,9 +24,10 @@ type CurrentStats struct {
 	TotalHits      int64
 	LastCalculated time.Time
 	ResponseTimes  []time.Duration
+	ResponseCodes  []int
 }
 
-type StatRecord struct {
+type GlobalStatRecord struct {
 	StartTime            time.Time
 	EndTime              time.Time
 	AverageResponseTime  time.Duration
@@ -34,40 +35,53 @@ type StatRecord struct {
 	TotalRequests        int64
 }
 
-var currentStats CurrentStats
+var globalCurrentStats CurrentStats
 
 func recordStat(res *http.Response, elapsed time.Duration) {
 	// TODO Mutex vs Channels?
-	currentStats.Lock()
-	currentStats.Hits++
-	currentStats.TotalHits++
-	currentStats.ResponseTimes = append(currentStats.ResponseTimes, elapsed)
-	currentStats.Unlock()
+	globalCurrentStats.Lock()
+	globalCurrentStats.Hits++
+	globalCurrentStats.TotalHits++
+	globalCurrentStats.ResponseTimes = append(globalCurrentStats.ResponseTimes, elapsed)
+	globalCurrentStats.ResponseCodes = append(globalCurrentStats.ResponseCodes, res.StatusCode)
+	globalCurrentStats.Unlock()
 }
 
-func printReqsec() {
-	var statRecord StatRecord
+func processGlobalStats() {
+	var statRecord GlobalStatRecord
 
-	currentStats.Lock()
-	statRecord.TotalRequests = currentStats.Hits
-	statRecord.StartTime = currentStats.LastCalculated
+	globalCurrentStats.Lock()
+	statRecord.TotalRequests = globalCurrentStats.Hits
+	statRecord.StartTime = globalCurrentStats.LastCalculated
 	statRecord.EndTime = time.Now()
 
-	currentStats.Hits = 0
-	currentStats.LastCalculated = statRecord.EndTime
-	responseTimes := currentStats.ResponseTimes
-	currentStats.ResponseTimes = []time.Duration{}
+	globalCurrentStats.Hits = 0
+	globalCurrentStats.LastCalculated = statRecord.EndTime
+	responseTimes := globalCurrentStats.ResponseTimes
+	responseCodes := globalCurrentStats.ResponseCodes
+	globalCurrentStats.ResponseTimes = []time.Duration{}
+	globalCurrentStats.ResponseCodes = []int{}
 
-	currentStats.Unlock()
+	globalCurrentStats.Unlock()
 
-	statRecord.AverageResponseTime = AverageDuration(responseTimes)
+	statRecord.AverageResponseTime = GetAverageDuration(responseTimes)
+	statRecord.ResponseStatusCounts = MakeFrequencyMap(responseCodes)
 
-	log.Println(statRecord)
+	globalStatSink <- statRecord
+}
+
+func statProcessor() {
+	for {
+		processGlobalStats()
+		time.Sleep(10 * time.Second)
+	}
 }
 
 func reqsPrinter() {
 	for {
-		printReqsec()
-		<-time.After(10 * time.Second)
+		select {
+		case astat := <-globalStatSink:
+			log.Println(astat)
+		}
 	}
 }
