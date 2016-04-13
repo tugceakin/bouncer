@@ -19,6 +19,7 @@ func main() {
 }
 
 func director(req *http.Request) {
+	next := <-defaultConfig.NextBackendServer
 	req.URL.Scheme = "http"
-	req.URL.Host = defaultConfig.BackendServers[0].Host
+	req.URL.Host = next.Host
 }

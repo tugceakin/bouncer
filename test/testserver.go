@@ -2,6 +2,7 @@ package main
 
 import (
 	// "fmt"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -20,8 +21,8 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		// println("--->", "sleeping")
 		time.Sleep(50 * time.Millisecond)
-		// println("--->", os.Args[1], req.URL.String())
-		// fmt.Fprintf(w, "Hi there, I love %s!\n", req.URL.Path)
+		println("--->", os.Args[1], req.URL.String())
+		fmt.Fprintf(w, "Hi there, I love %s!\n", req.URL.Path)
 	})
 	http.ListenAndServe(":"+os.Args[1], nil)
 }

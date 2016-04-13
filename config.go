@@ -17,9 +17,11 @@ import (
 var db *sql.DB
 
 type Config struct {
-	Id             int
-	Host           string
-	BackendServers []BackendServer
+	Id                int
+	Host              string
+	BackendServers    []BackendServer
+	NextBackendServer chan BackendServer
+	done              chan struct{}
 }
 
 type BackendServer struct {
@@ -28,9 +30,30 @@ type BackendServer struct {
 	ConfigId int
 }
 
+func (config *Config) NextBackendServerRoutine() {
+	for {
+		for _, next := range config.BackendServers {
+			select {
+			case config.NextBackendServer <- next:
+
+			case <-config.done:
+				return
+			}
+		}
+
+	}
+}
+
+func (config *Config) Destroy() {
+	config.done <- struct{}{}
+}
+
 func NewConfig(hostname string, backendServers []BackendServer) Config {
 	var config Config
 	config.BackendServers = backendServers
+	config.NextBackendServer = make(chan BackendServer)
+	config.done = make(chan struct{})
+	go config.NextBackendServerRoutine()
 	return config
 }
 
