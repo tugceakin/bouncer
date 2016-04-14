@@ -15,6 +15,7 @@ func main() {
 
 	go statProcessor()
 	go reqsPrinter()
+	go UIServer()
 	http.ListenAndServe(":9090", proxy)
 }
 

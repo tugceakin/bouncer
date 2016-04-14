@@ -1,0 +1,92 @@
+.menu{
+    background-color: white;
+    border-color: white;
+    /*min-height: 200px;*/
+}
+
+.menu-buttons{
+    padding-top: 0.8%;
+    padding: 10px;
+}
+
+.menu-buttons > a{
+    margin-right: 10px;
+}
+
+.center{
+    text-align: center;
+}
+
+body{
+    /*background-color: #f9f9f9;*/
+    background-color: #EBEBEB;
+    padding-top: 50px;
+}
+/*body {*/
+    /*padding-top: 70px;*/
+    /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+/*}*/
+.box{
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.submenu{
+    background-color: gainsboro;
+    margin:0px;
+
+}
+
+#spartan-logo{
+    width:75px;
+    height:50px;
+}
+
+.navbar{
+    background-color: dimgrey;
+}
+
+ul.navbar a {
+    color:white;
+}
+
+nav li a, #dropdown-menu{
+    color: white;
+    text-decoration: underline;
+}
+
+.box-description{
+    color: gray;
+}
+
+#dropdown-right{
+    margin-top: 1em;
+    cursor: pointer;
+}
+
+#dropdown-right li{
+    cursor: pointer;
+}
+
+.checkbox-content, .form-content{
+    padding: 1em;
+}
+
+#showRequestsGraph{
+    width: 100px;
+}
+
+.graphContainer{
+    margin-bottom: 5%;
+}
+
+.submenu a  {
+    width: 150px;
+}
+
+#benchmark-input-div {
+    margin: 15px;
+}
+
+

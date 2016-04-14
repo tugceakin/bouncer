@@ -1,0 +1,62 @@
+<div class="col-md-6 col-md-offset-3">
+    <h1>Heading</h1>
+    <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
+</div>
+<div class="container box col-md-6 col-md-offset-3">
+
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>Index</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus. Donec non tincidunt purus, vitae sollicitudin ipsum. Nullam dictum rhoncus nunc quis ornare. Praesent ante velit, vestibulum faucibus pharetra in, accumsan id libero. Praesent nulla enim, vestibulum non auctor sed, ullamcorper vel nisl. Suspendisse sit amet orci maximus, imperdiet felis euismod, maximus metus. Curabitur sed ullamcorper arcu. Donec venenatis varius nisl ut sodales. Donec venenatis ipsum vel metus viverra, a volutpat ipsum tempor. Duis ullamcorper pellentesque est et tempor.
+
+            </p>
+
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-md-offset-3">
+    <h1>Benchmarking</h1>
+    <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
+</div>
+<div class="container box col-md-6 col-md-offset-3 graphContainer">
+
+    <div class="row">
+        <div class="col-lg-6 col-md-offset-3 text-center ">
+            <div class="form-group" ng-show="graphOff" id="benchmark-input-div">
+                <input  class="form-control" name="benchmark-input" ng-model="benchmarkInput" id="benchmark-input" placeholder="Something">
+            </div>
+            <button class="btn btn-success btn-lg" id="showRequestsGraph" ng-show="graphOff" ng-click="startBenchmarking()">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                Start
+            </button>
+
+            <button class="btn btn-primary btn-lg" id="" ng-show="benchmarkCompleted" ng-click="">
+                <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                Stats
+            </button>
+
+
+            <div class="spinner" ng-hide="graphOff">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center">
+            <h2>Requests Per Second</h2>
+            <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels"
+                    chart-legend="false" chart-series="series" chart-click="onClick"></canvas>
+
+        </div>
+
+        <!--<div class="col-md-6 text-center">-->
+        <!--<h1>Requests Per Time</h1>-->
+        <!--</div>-->
+
+
+    </div>
+</div>
