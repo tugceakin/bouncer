@@ -5,15 +5,16 @@ import (
 	_ "net/http/pprof"
 )
 
-var globalStatSink chan GlobalStatRecord
 var defaultConfig Config
 
 func main() {
 	globalStatSink = make(chan GlobalStatRecord)
+	globalStatSinkSubscribers = make([]chan GlobalStatRecord, 0)
 	proxy := &ReverseProxy{Director: director}
-	defaultConfig = NewConfig("localhost:9091", []BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")})
+	defaultConfig = NewConfig("localhost:9090", []BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")})
 
 	go statProcessor()
+	go GlobalStatBroadcaster()
 	go reqsPrinter()
 	go UIServer()
 	http.ListenAndServe(":9090", proxy)

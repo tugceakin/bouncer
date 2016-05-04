@@ -36,6 +36,8 @@ type GlobalStatRecord struct {
 }
 
 var globalCurrentStats CurrentStats
+var globalStatSink chan GlobalStatRecord
+var globalStatSinkSubscribers []chan GlobalStatRecord
 
 func recordStat(res *http.Response, elapsed time.Duration) {
 	// TODO Mutex vs Channels?
@@ -77,10 +79,27 @@ func statProcessor() {
 	}
 }
 
-func reqsPrinter() {
+func SubscribeGlobalStats(c chan GlobalStatRecord) {
+	globalStatSinkSubscribers = append(globalStatSinkSubscribers, c)
+}
+
+func GlobalStatBroadcaster() {
 	for {
 		select {
 		case astat := <-globalStatSink:
+			for _, c := range globalStatSinkSubscribers {
+				c <- astat
+			}
+		}
+	}
+}
+
+func reqsPrinter() {
+	c := make(chan GlobalStatRecord)
+	SubscribeGlobalStats(c)
+	for {
+		select {
+		case astat := <-c:
 			log.Println(astat)
 		}
 	}
