@@ -1,20 +1,4 @@
 <div class="col-md-6 col-md-offset-3">
-    <h1>Heading</h1>
-    <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
-</div>
-<div class="container box col-md-6 col-md-offset-3">
-
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1>Index</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus. Donec non tincidunt purus, vitae sollicitudin ipsum. Nullam dictum rhoncus nunc quis ornare. Praesent ante velit, vestibulum faucibus pharetra in, accumsan id libero. Praesent nulla enim, vestibulum non auctor sed, ullamcorper vel nisl. Suspendisse sit amet orci maximus, imperdiet felis euismod, maximus metus. Curabitur sed ullamcorper arcu. Donec venenatis varius nisl ut sodales. Donec venenatis ipsum vel metus viverra, a volutpat ipsum tempor. Duis ullamcorper pellentesque est et tempor.
-
-            </p>
-
-        </div>
-    </div>
-</div>
-<div class="col-md-6 col-md-offset-3">
     <h1>Benchmarking</h1>
     <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
 </div>
@@ -22,15 +6,32 @@
 
     <div class="row">
         <div class="col-lg-6 col-md-offset-3 text-center ">
-            <div class="form-group" ng-show="graphOff" id="benchmark-input-div">
+<!--             <div class="form-group" ng-show="graphOff" id="benchmark-input-div">
                 <input  class="form-control" name="benchmark-input" ng-model="benchmarkInput" id="benchmark-input" placeholder="Something">
-            </div>
+            </div> -->
+            <form id="benchmarking-form" ng-show="graphOff">
+        
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Configuration name</label>
+                  <input  class="form-control" name="configName" ng-model="configName" id="item1" placeholder="Enter configuration name...">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputPassword1">Host name</label>
+                  <input  class="form-control" name= "hostName" ng-model="hostName" id="item2" placeholder="Enter host name...">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputPassword1">Port</label>
+                  <input  class="form-control" name= "port" ng-model="port" id="item2" placeholder="Enter port number...">
+              </div>
+
+  <!--             <button type="submit" class="btn btn-primary submitButton" ng-click="submit()" >Submit</button> -->
+            </form>
             <button class="btn btn-success btn-lg" id="showRequestsGraph" ng-show="graphOff" ng-click="startBenchmarking()">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 Start
             </button>
 
-            <button class="btn btn-primary btn-lg" id="" ng-show="benchmarkCompleted" ng-click="">
+            <button class="btn btn-primary btn-lg" id="" ng-show="benchmarkCompleted" ng-click="getBenchmarkingStats()">
                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                 Stats
             </button>
@@ -45,18 +46,62 @@
 
         </div>
     </div>
+    <hr>
     <div class="row">
-        <div class="col-md-6 col-md-offset-3 text-center">
+        <div class="col-md-6 col-md-offset-3 text-center" id="main-graph">
             <h2>Requests Per Second</h2>
             <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels"
                     chart-legend="false" chart-series="series" chart-click="onClick"></canvas>
 
         </div>
 
-        <!--<div class="col-md-6 text-center">-->
-        <!--<h1>Requests Per Time</h1>-->
-        <!--</div>-->
 
 
     </div>
 </div>
+
+
+    <div class="col-md-6 col-md-offset-3" ng-show="statsShown">
+        <h1>Stats</h1>
+        <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
+    </div>
+    <div class="container box col-md-6 col-md-offset-3 statsContainer" ng-show="statsShown">
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+         <!--    <canvas id="bar" class="chart chart-bar" chart-series="series"
+              chart-data="data" chart-labels="labels"> 
+            </canvas> --> 
+  
+                <svg width="500" height="130">
+                 <circle cx="50" cy="55" r="50"
+                    fill="rgb(51, 204, 51)" stroke="rgb(0, 153, 51)" stroke-width="5"/>
+                      <text x="45" y="50"
+                         font-family="sans-serif"
+                         font-size="20px"
+                         text-anchor="middle"
+                         fill="white">     Completed:       {{stats.complete_requests}}
+                        </text>
+
+                <circle cx="135" cy="45" r="40"
+                    fill="rgb(204, 51, 0)" stroke="rgb(153, 0, 0)" stroke-width="5"/>
+                      <text x="135" y="50"
+                         font-family="sans-serif"
+                         font-size="20px"
+                         text-anchor="middle"
+                         fill="white">            {{stats.failed_requests}}
+                        </text>
+                </svg>
+
+            </div>
+
+       
+          {{stats.transfer_rate}}
+
+        </div>
+
+        <div class="container box col-md-8 col-md-offset-2" id="">
+            <div ></div>
+
+        </div>
+    </div>

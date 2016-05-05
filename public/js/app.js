@@ -9,11 +9,11 @@ var bouncerApp = angular.module('bouncerApp', ['chart.js', 'ngRoute', 'ngAnimate
     $routeProvider.
     when('/', {
         templateUrl: 'benchmarking.html',
-        controller: 'RequestsGraphController'
+        controller: 'BenchmarkingController'
     }).
     when('/benchmarking', {
         templateUrl: 'benchmarking.html',
-        controller: 'RequestsGraphController'
+        controller: 'BenchmarkingController'
     }).
     when('/page1', {
         templateUrl: 'page1.html',

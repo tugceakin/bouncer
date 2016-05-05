@@ -19,25 +19,13 @@
     <link href="public/css/main.css" rel="stylesheet">
     <link href="public/css/animations.css" rel="stylesheet">
 
-    <style>
-
-    </style>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 
 </head>
 
 <body>
 
-    <!-- Navigation -->
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-fixed-top" role="navigation">
+        <nav class="navbar navbar-fixed-top" role="navigation" >
         <div class="container col-md-6 col-md-offset-3">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -50,52 +38,20 @@
                 <a href="#/" class="pull-left"><img src="public/img/spartans.jpg" id="spartan-logo"></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="dropdown pull-right" id="dropdown-right">
-                <a class="dropdown-toggle" type="button" id="dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    email@email.com
-                    <span class="caret"></span>
+         <ul id="navlist" style="list-style: none;">
+            <li><a href="#/benchmarking">
+                <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
+                    <span>&nbsp;Benchmark</span>
                 </a>
-                <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Logout</a></li>
-                </ul>
-            </div>
+            </li>
+            <li><a href="#/page1">Item2</a></li>
+            <li><a href="#/page2">Item3</a></li>
+        </ul>
+
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
-    </nav>
-    <div class="submenu">
-
-        <!-- Single button -->
-        <div class="container center menu-buttons">
-            <!--<div>-->
-            <row>
-                <a href="#/benchmarking" type="button" class="btn btn-success btn-lg">
-                    <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
-                    <span>&nbsp;Benchmark</span>
-
-                </a>
-
-                <!--</div>-->
-                <a href="#/page1" type="button" class="btn btn-primary btn-lg">
-                    <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
-                    <span>&nbsp;Item2</span>
-
-                </a>
-                <a href="#/page2" type="button" class="btn btn-danger btn-lg">
-                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                    <span>&nbsp;Item3</span>
-
-                </a>
-            </row>
-
-
-            <row>
-
-            </row>
-        </div>
-        <!-- /.row -->
-    </div>
+</nav>
 
     <div ng-view class="reveal-animation"></div>
 
@@ -107,11 +63,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-resource.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-route.min.js"></script>
-    <script src=" https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-animate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
     <script src="public/lib/angular-ui-switch/angular-ui-switch.min.js"></script>
     <script src="public/js/app.js"></script>
-    <script src="public/js/controllers/requestsGraphController.js"></script>
+    <script src="public/js/services/graphFactory.js"></script>
+    <script src="public/js/controllers/benchmarkingController.js"></script>
     <script src="public/js/controllers/apiController.js"></script>
 
 
