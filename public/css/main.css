@@ -102,7 +102,7 @@ nav li a, #dropdown-menu{
     font-weight: bold;
     color: #ccc;
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
     -webkit-border-radius: 14px;
     -moz-border-radius: 14px;
@@ -119,6 +119,14 @@ nav li a, #dropdown-menu{
      background: rgba(255, 255, 255, 0.15);
  }
 
- #benchmarking-form {
+ #benchmarking-form, #stopBenchmarking {
     margin-top: 15px;
+ }
+
+ .graphContainer {
+    margin-bottom: 3%;
+ }
+
+ .benchmarkingGraph {
+    margin-bottom: 20px;
  }
