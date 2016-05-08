@@ -1,24 +1,10 @@
 package main
 
-import (
-	"database/sql"
-
-	_ "github.com/mattn/go-sqlite3"
-)
-
-// func MakeBackendChannelMap(rules []ConfigRule) map[ConfigRuleId]chan string {
-// 	ret := make(map[ConfigRuleId]chan string)
-// 	for _, rule := range rules {
-// 		ret[rule.Id] = make(chan string)
-// 	}
-// 	ret
-// }
-
-var db *sql.DB
-
 type Config struct {
 	Id                int
 	Host              string
+	ReqPerSecond      int
+	Concurrency       int
 	BackendServers    []BackendServer
 	NextBackendServer chan BackendServer
 	done              chan struct{}
