@@ -44,7 +44,7 @@ body{
 }
 
 .navbar{
-    background-color: dimgrey;
+    background-color: #005aa1;
 }
 
 ul.navbar a {
@@ -77,7 +77,7 @@ nav li a, #dropdown-menu{
     width: 100px;
 }
 
-.graphContainer{
+.statsContainer{
     margin-bottom: 5%;
 }
 
@@ -89,4 +89,44 @@ nav li a, #dropdown-menu{
     margin: 15px;
 }
 
+#navlist {
+  float: right;
+  padding: 17px 0 0 10px;
+  }
+#navlist li {
+  float: left;
+  margin: 0 0 0 5px;
+  }
+#navlist li a {
+    padding: 5px 15px;
+    font-weight: bold;
+    color: #ccc;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    border-radius: 14px;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
 
+#navlist li a:hover,
+   #navlist li a:focus {
+     color: #fff;
+     background: rgba(255, 255, 255, 0.15);
+ }
+
+ #benchmarking-form, #stopBenchmarking {
+    margin-top: 15px;
+ }
+
+ .graphContainer {
+    margin-bottom: 3%;
+ }
+
+ .benchmarkingGraph {
+    margin-bottom: 20px;
+ }

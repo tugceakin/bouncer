@@ -1,36 +1,35 @@
-<div class="col-md-6 col-md-offset-3">
-    <h1>Heading</h1>
-    <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
-</div>
-<div class="container box col-md-6 col-md-offset-3">
-
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1>Index</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus. Donec non tincidunt purus, vitae sollicitudin ipsum. Nullam dictum rhoncus nunc quis ornare. Praesent ante velit, vestibulum faucibus pharetra in, accumsan id libero. Praesent nulla enim, vestibulum non auctor sed, ullamcorper vel nisl. Suspendisse sit amet orci maximus, imperdiet felis euismod, maximus metus. Curabitur sed ullamcorper arcu. Donec venenatis varius nisl ut sodales. Donec venenatis ipsum vel metus viverra, a volutpat ipsum tempor. Duis ullamcorper pellentesque est et tempor.
-
-            </p>
-
-        </div>
-    </div>
-</div>
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-6 col-md-offset-3 text-center">
     <h1>Benchmarking</h1>
     <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
 </div>
-<div class="container box col-md-6 col-md-offset-3 graphContainer">
+<div class="container box col-md-8 col-md-offset-2 graphContainer">
 
     <div class="row">
         <div class="col-lg-6 col-md-offset-3 text-center ">
-            <div class="form-group" ng-show="graphOff" id="benchmark-input-div">
-                <input  class="form-control" name="benchmark-input" ng-model="benchmarkInput" id="benchmark-input" placeholder="Something">
-            </div>
+
+            <form id="benchmarking-form" ng-show="graphOff">
+        
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Configuration name</label>
+                  <input  class="form-control" name="configName" ng-model="configName" id="item1" placeholder="Enter configuration name...">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputPassword1">Host name</label>
+                  <input  class="form-control" name= "hostName" ng-model="hostName" id="item2" placeholder="Enter host name...">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputPassword1">Port</label>
+                  <input  class="form-control" name= "port" ng-model="port" id="item2" placeholder="Enter port number...">
+              </div>
+
+  <!--             <button type="submit" class="btn btn-primary submitButton" ng-click="submit()" >Submit</button> -->
+            </form>
             <button class="btn btn-success btn-lg" id="showRequestsGraph" ng-show="graphOff" ng-click="startBenchmarking()">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 Start
             </button>
 
-            <button class="btn btn-primary btn-lg" id="" ng-show="benchmarkCompleted" ng-click="">
+            <button class="btn btn-primary btn-lg" id="" ng-show="benchmarkCompleted" ng-click="getBenchmarkingStats()">
                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                 Stats
             </button>
@@ -42,21 +41,135 @@
                 <div class="bounce3"></div>
             </div>
 
+            <button class="btn btn-danger btn-lg" id="stopBenchmarking" ng-hide="graphOff" ng-click="closeConnection()">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                Stop
+            </button>
 
         </div>
     </div>
+    <hr>
     <div class="row">
-        <div class="col-md-6 col-md-offset-3 text-center">
+        <div class="col-md-6 text-center benchmarkingGraph" id="main-graph">
             <h2>Requests Per Second</h2>
-            <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels"
-                    chart-legend="false" chart-series="series" chart-click="onClick"></canvas>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                  <canvas id="line" class="chart chart-line" chart-data="reqPerSecData" chart-labels="reqPerSecLabels"
+                          chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
+                          fillColor: 'rgba(63, 127, 191, 0)',
+                          strokeColor: 'rgba(63, 127, 191,0.8)',
+                          pointColor: 'rgba(63, 127, 191, 1)',
+                          highlightFill: 'rgba(63, 127, 191,0.75)',
+                          highlightStroke: 'rgba(63, 127, 191,1)'
+              }];"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+<!--     </div>
+
+    <div class="row" > -->
+        <div class="col-md-6 text-center benchmarkingGraph" id="">
+            <h2>Average Response Time</h2>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <canvas id="line" class="chart chart-line" chart-data="respTimeData" chart-labels="respTimeLabels"
+                        chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
+                          fillColor: 'rgba(150,150,150, 0)',
+                          strokeColor: 'rgba(150,150,150,1)',
+                          pointColor: 'rgba(150,150,150,1)',
+                          pointStrokeColor: '#fff',
+                          pointHighlightFill: '#fff',
+                          pointHighlightStroke: 'rgba((150,150,150,0.8)'
+                      }];"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 text-center benchmarkingGraph" id="">
+          <h2>Status Counts: 200</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <canvas id="line" class="chart chart-line" chart-data="statusData" chart-labels="statusLabels"
+                      chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
+                        fillColor: 'rgba(26,179,148,0)',
+                        strokeColor: 'rgba(26,179,148,0.8)',
+                        pointColor: 'rgba(6,179,148,1)',
+                        highlightFill: 'rgba(26,179,148,0.75)',
+                        highlightStroke: 'rgba(26,179,148,1)'
+            }];"></canvas>
+            </div>
+          </div>
+
+      </div>
+
+      <div class="col-md-6 text-center benchmarkingGraph" id="">
+          <h2>Status Counts: 404</h2>
+          <div class="panel panel-default">
+                <div class="panel-body">
+                  <canvas id="line" class="chart chart-line" chart-data="status404Data" chart-labels="status404Labels"
+                          chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
+                              fillColor: 'rgba(224, 108, 112, 0)',
+                              strokeColor: 'rgba(207,100,103,1)',
+                              pointColor: 'rgba(207,100,103,1)',
+                              highlightFill: 'rgba(26,179,148,0.75)',
+                              highlightStroke: 'rgba(26,179,148,1)'
+                }];"></canvas>
+              </div>
+          </div>
+      </div>
+
+  </div>
+  </div>
+
+
+
+
+
+<!-- TODO: Static Stats Using D3.js -->
+
+<!--     <div class="col-md-6 col-md-offset-3" ng-show="statsShown">
+        <h1>Stats</h1>
+        <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
+    </div>
+    <div class="container box col-md-6 col-md-offset-3 statsContainer" ng-show="statsShown">
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+
+  
+                <svg width="500" height="130">
+                 <circle cx="50" cy="55" r="50"
+                    fill="rgb(51, 204, 51)" stroke="rgb(0, 153, 51)" stroke-width="5"/>
+                      <text x="45" y="50"
+                         font-family="sans-serif"
+                         font-size="20px"
+                         text-anchor="middle"
+                         fill="white">     Completed:       {{stats.complete_requests}}
+                        </text>
+
+                <circle cx="135" cy="45" r="40"
+                    fill="rgb(204, 51, 0)" stroke="rgb(153, 0, 0)" stroke-width="5"/>
+                      <text x="135" y="50"
+                         font-family="sans-serif"
+                         font-size="20px"
+                         text-anchor="middle"
+                         fill="white">            {{stats.failed_requests}}
+                        </text>
+                </svg>
+
+            </div>
+
+       
+          {{stats.transfer_rate}}
 
         </div>
 
-        <!--<div class="col-md-6 text-center">-->
-        <!--<h1>Requests Per Time</h1>-->
-        <!--</div>-->
+        <div class="container box col-md-8 col-md-offset-2" id="">
+            <div ></div>
 
-
-    </div>
-</div>
+        </div>
+    </div> -->
