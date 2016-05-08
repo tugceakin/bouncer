@@ -3,6 +3,7 @@ package main
 type Config struct {
 	Id                int
 	Host              string
+	Path              string
 	ReqPerSecond      int
 	Concurrency       int
 	BackendServers    []BackendServer
