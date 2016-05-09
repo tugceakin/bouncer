@@ -152,6 +152,10 @@ func (p *ReverseProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	config, backendServer := p.Director(outreq)
+	if config == nil && backendServer == nil {
+		rw.WriteHeader(503)
+		return
+	}
 	outreq.Proto = "HTTP/1.1"
 	outreq.ProtoMajor = 1
 	outreq.ProtoMinor = 1
