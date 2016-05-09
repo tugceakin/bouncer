@@ -1,14 +1,15 @@
 package main
 
 type Config struct {
-	Id                int
-	Host              string
-	Path              string
-	ReqPerSecond      int
-	Concurrency       int
-	BackendServers    []BackendServer
-	NextBackendServer chan BackendServer
-	done              chan struct{}
+	Id                            int
+	Host                          string
+	Path                          string
+	TargetPath                    string
+	ReqPerSecond                  int
+	MaxConcurrentPerBackendServer int
+	BackendServers                []BackendServer
+	NextBackendServer             chan BackendServer
+	done                          chan struct{}
 }
 
 type BackendServer struct {
@@ -17,17 +18,11 @@ type BackendServer struct {
 	ConfigId int
 }
 
-func (config *Config) NextBackendServerRoutine() {
-	for {
+func (config *Config) BackendServerBootstrapRoutine() {
+	for i := 0; i < config.MaxConcurrentPerBackendServer; i++ {
 		for _, next := range config.BackendServers {
-			select {
-			case config.NextBackendServer <- next:
-
-			case <-config.done:
-				return
-			}
+			config.NextBackendServer <- next
 		}
-
 	}
 }
 
@@ -35,12 +30,16 @@ func (config *Config) Destroy() {
 	config.done <- struct{}{}
 }
 
-func NewConfig(hostname string, backendServers []BackendServer) Config {
+func NewConfig(hostname string, backendServers []BackendServer, path string, targetPath string, concurrency int, reqPerSecond int) Config {
 	var config Config
 	config.BackendServers = backendServers
-	config.NextBackendServer = make(chan BackendServer)
+	config.NextBackendServer = make(chan BackendServer, concurrency)
 	config.done = make(chan struct{})
-	go config.NextBackendServerRoutine()
+	config.MaxConcurrentPerBackendServer = concurrency
+	config.ReqPerSecond = reqPerSecond
+	config.Path = path
+	config.TargetPath = targetPath
+	go config.BackendServerBootstrapRoutine()
 	return config
 }
 
