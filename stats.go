@@ -39,7 +39,6 @@ var globalCurrentStats CurrentStats
 var globalStatSink chan GlobalStatRecord
 var globalStatSinkSubscribers []chan GlobalStatRecord
 
-
 func recordStat(res *http.Response, elapsed time.Duration) {
 	// TODO Mutex vs Channels?
 	globalCurrentStats.Lock()
@@ -69,14 +68,13 @@ func processGlobalStats() {
 
 	statRecord.AverageResponseTime = GetAverageDuration(responseTimes)
 	statRecord.ResponseStatusCounts = MakeFrequencyMap(responseCodes)
-	
 	globalStatSink <- statRecord
 }
 
 func statProcessor() {
 	for {
 		processGlobalStats()
-		time.Sleep(1 * time.Second)
+		time.Sleep(10 * time.Second)
 	}
 }
 
@@ -105,4 +103,3 @@ func reqsPrinter() {
 		}
 	}
 }
-
