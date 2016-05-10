@@ -119,8 +119,12 @@ nav li a, #dropdown-menu{
      background: rgba(255, 255, 255, 0.15);
  }
 
- #benchmarking-form, #stopBenchmarking {
+ #add-configuration-form, #stopBenchmarking {
     margin-top: 15px;
+ }
+
+ #add-configuration-form {
+    margin-bottom: 15px;
  }
 
  .graphContainer {
@@ -130,3 +134,15 @@ nav li a, #dropdown-menu{
  .benchmarkingGraph {
     margin-bottom: 20px;
  }
+
+.backend-server-input, #backendServerFormLabel, .configuration-tabs{
+    margin-top: 10px;
+}
+
+.backendServerButtons, #targetPathInput, #pathInput{
+    margin-bottom: 10px;
+}
+
+#remove-input-button{
+    margin-left: 10px;
+}

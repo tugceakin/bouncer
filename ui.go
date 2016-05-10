@@ -2,11 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
-	"github.com/gorilla/websocket"
 )
 
 var connections map[*websocket.Conn]bool
@@ -20,10 +20,10 @@ func parseBenchmarkingForm(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	log.Println(benchmarkMap["configName"])
+	log.Println(benchmarkMap["configId"])
 }
 
-func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn){
+func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn) {
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
@@ -31,7 +31,7 @@ func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn){
 			conn.Close()
 			return
 		}
-		if(string(msg) == "quit"){
+		if string(msg) == "quit" {
 			quit <- conn
 		}
 	}
@@ -50,42 +50,40 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Succesfully upgraded connection")
 	connections[conn] = true
 
-
 	quit := make(chan *websocket.Conn)
 	//go func() {
-	    for {
-	       select {
-	       	case astat := <- globalStatSink:
-	       		newStatsMap := make(map[string]interface{})
-	       		statusCountsMap := make(map[string]int)
+	for {
+		select {
+		case astat := <-globalStatSink:
+			newStatsMap := make(map[string]interface{})
+			statusCountsMap := make(map[string]int)
 
-		       	newStatsMap["totalReq"] = strconv.FormatInt(astat.TotalRequests, 10)
-		       	newStatsMap["avgRespTime"] = strconv.Itoa(int(astat.AverageResponseTime))
-		       	newStatsMap["endTime"] = astat.EndTime.Format("15:04:05")
-		       	//avgRespTime := strconv.FormatInt(int(astat.AverageResponseTime.Seconds()),10)
-		       	log.Println(astat.EndTime.Format("15:04:05"))
-		       	//Maps that have integer keys cannot be marshalled. Create new map with string keys.
-		       	for k, v := range astat.ResponseStatusCounts { 
-		       		statusCountsMap[strconv.Itoa(k)] = v 
-		       	}
-		       	newStatsMap["statusCount"] = statusCountsMap
+			newStatsMap["totalReq"] = strconv.FormatInt(astat.TotalRequests, 10)
+			newStatsMap["avgRespTime"] = strconv.Itoa(int(astat.AverageResponseTime))
+			newStatsMap["endTime"] = astat.EndTime.Format("15:04:05")
 
-		       	jsonStr, _ := json.Marshal(newStatsMap)
+			//Maps that have integer keys cannot be marshalled. Create new map with string keys.
+			for k, v := range astat.ResponseStatusCounts {
+				statusCountsMap[strconv.Itoa(k)] = v
+			}
+			newStatsMap["statusCount"] = statusCountsMap
 
-		        for conn := range connections {
-		        	go closeConnectionListener(conn, quit)
-					if err := conn.WriteMessage(websocket.TextMessage, []byte(jsonStr)); err != nil { 
-						delete(connections, conn)
-						conn.Close()
-					}
+			jsonStr, _ := json.Marshal(newStatsMap)
+
+			for conn := range connections {
+				go closeConnectionListener(conn, quit)
+				if err := conn.WriteMessage(websocket.TextMessage, []byte(jsonStr)); err != nil {
+					delete(connections, conn)
+					conn.Close()
 				}
-	        case socketConnection := <- quit: //Put an empty struct?
-	        	delete(connections, socketConnection)
-	            socketConnection.Close()
-	            return
-	        }
-	    }
-	 //}()
+			}
+		case socketConnection := <-quit: //Put an empty struct?
+			delete(connections, socketConnection)
+			socketConnection.Close()
+			return
+		}
+	}
+	//}()
 }
 
 func UIServer() {
