@@ -225,7 +225,7 @@ func (p *ReverseProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	res.Body.Close() // close now, instead of defer, to populate res.Trailer
 	copyHeader(rw.Header(), res.Trailer)
 	elapsed := time.Since(startTime)
-	go recordStat(res, elapsed)
+	go recordStat(config, res, elapsed)
 	go func() {
 		config.NextBackendServer <- *backendServer
 	}()
