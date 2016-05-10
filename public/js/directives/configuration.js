@@ -13,7 +13,7 @@ bouncerApp.directive("addinput", function($compile){
 		element.bind("click", function(){
 			scope.backendServerCount++;
 			angular.element(document.getElementById('backend-servers')).append(
-				$compile("<input class='form-control backend-server-input' name= 'backendServer' ng-model='backendServer"+scope.backendServerCount+"' "
+				$compile("<input class='form-control backend-server-input backendServerInput' name= 'backendServer' ng-model='config.backendServer"+scope.backendServerCount+"' "
 					+ "id='backendServerInput" + scope.backendServerCount +"' placeholder='Enter backend server name...'>")(scope)
 				);
 		});

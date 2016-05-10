@@ -11,16 +11,29 @@ import (
 
 var connections map[*websocket.Conn]bool
 var statChan chan GlobalStatRecord
+var configStore ConfigStore
 
-//For later. Will be used to parse config inputs.
-func parseBenchmarkingForm(w http.ResponseWriter, r *http.Request) {
-	decoder := json.NewDecoder(r.Body)
+func addConfiguration(w http.ResponseWriter, r *http.Request) {
 	var benchmarkMap map[string]interface{}
+
+	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&benchmarkMap)
 	if err != nil {
 		panic(err)
 	}
-	log.Println(benchmarkMap["configId"])
+
+	backendServerArr := make([]BackendServer, len(benchmarkMap["backendServers"].([]interface{})))
+
+	for k, v := range benchmarkMap["backendServers"].([]interface{}) {
+		backendServer := NewBackendServer(v.(map[string]interface{})["host"].(string))
+		backendServerArr[k] = backendServer
+	}
+
+	concurrency, _ := strconv.Atoi(benchmarkMap["concurrency"].(string))
+	reqPerSecond, _ := strconv.Atoi(benchmarkMap["reqPerSecond"].(string))
+
+	config := NewConfig(benchmarkMap["host"].(string), backendServerArr, benchmarkMap["path"].(string), benchmarkMap["targetPath"].(string), concurrency, reqPerSecond)
+	configStore.AddConfig(&config)
 }
 
 func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn) {
@@ -51,7 +64,6 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	connections[conn] = true
 
 	quit := make(chan *websocket.Conn)
-	//go func() {
 	for {
 		select {
 		case astat := <-globalStatSink:
@@ -83,11 +95,12 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	//}()
 }
 
 func UIServer() {
 	connections = make(map[*websocket.Conn]bool)
+	configStore = make(ConfigStore)
+	log.Println(configStore) //I'm using this to escape from "not used" error. I don't know where else to assign configStore.
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public/"))))
 	http.Handle("/", http.FileServer(http.Dir("./templates/")))
@@ -95,12 +108,11 @@ func UIServer() {
 
 	// Default to :8080 if not defined via environmental variable.
 	var listen string = os.Getenv("LISTEN")
-
 	if listen == "" {
 		listen = ":8080"
 	}
 
 	log.Println("listening on", listen)
-	http.HandleFunc("/startBenchmarking", parseBenchmarkingForm)
+	http.HandleFunc("/addConfiguration", addConfiguration)
 	http.ListenAndServe(listen, nil)
 }

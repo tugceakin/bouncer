@@ -12,7 +12,6 @@ bouncerApp.controller('BenchmarkingController', function($scope, $interval, $htt
     $scope.statsShown = false;
     $scope.currentConfigId = 1;
     $scope.backendServers = [];
-    $scope.backendServerCount = 1;
 
     benchmarking.setSocketConnection;
     benchmarking.resetGraph($scope);
@@ -20,16 +19,6 @@ bouncerApp.controller('BenchmarkingController', function($scope, $interval, $htt
 
 
     $scope.startBenchmarking = function(){
-        var config = {
-            "id": $scope.configId,
-            "host": $scope.hostName,
-            "path": $scope.path,
-            "reqPerSecond": $scope.reqPerSecond,
-            "concurrency": $scope.concurrency,
-            "backendServers": configuration.getBackendServers($scope)
-        };
-
-        console.log(config);
         benchmarking.resetGraph($scope);
         benchmarking.updateGraph($scope);
         //$scope.stats = benchmarking.getBenchmarkingStats();

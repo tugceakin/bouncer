@@ -6,49 +6,6 @@
 
     <div class="row">
         <div class="col-lg-6 col-md-offset-3 text-center ">
-
-            <form id="benchmarking-form" ng-show="graphOff">
-        
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Configuration ID</label>
-                  <input  class="form-control" name="configName" ng-model="configId" id="" placeholder="Configuration ID...">
-              </div>
-              <div class="form-group">
-                  <label>Host name</label>
-                  <input  class="form-control" name= "hostName" ng-model="hostName" id="" placeholder="Host name...">
-              </div>
-              <div class="form-group">
-                <div class="col-md-6">
-                  <label>Path</label>
-                  <input  class="form-control" name= "path" ng-model="path" id="" placeholder="Path...">
-                </div>
-                <div class="col-md-6">
-                   <label>Target Path</label>
-                  <input  class="form-control" name= "targetPath" ng-model="targetPath" id="" placeholder="Target path...">
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-6">
-                  <label>Requests Per Seconds</label>
-                  <input  class="form-control" name= "reqPerSecond" ng-model="reqPerSecond" id="" placeholder="Request per seconds...">
-                </div>
-                <div class="col-md-6">
-                   <label>Concurrency</label>
-                  <input  class="form-control" name= "concurrency" ng-model="concurrency" id="" placeholder="Concurrency...">
-                </div>
-              </div>
-              <label id="backendServerFormLabel">Backend Servers</label>
-              <div class="form-group" id="backend-servers">
-                  <addbackendserverinput></addbackendserverinput>
-                  <input  class="form-control" name= "backendServer" ng-model="backendServer1" id="backendServerInput1" placeholder="Enter backend server name...">
-              </div>
-
-            </form>
-
-            <button class="btn btn-primary btn-md" id="showRequestsGraph" ng-show="graphOff" ng-click="">
-                <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
-                Save
-            </button>
             <button class="btn btn-success btn-md" id="showRequestsGraph" ng-show="graphOff" ng-click="startBenchmarking()">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 Start
@@ -149,52 +106,3 @@
 
   </div>
   </div>
-
-
-
-
-
-<!-- TODO: Static Stats Using D3.js -->
-
-<!--     <div class="col-md-6 col-md-offset-3" ng-show="statsShown">
-        <h1>Stats</h1>
-        <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
-    </div>
-    <div class="container box col-md-6 col-md-offset-3 statsContainer" ng-show="statsShown">
-
-        <div class="row">
-            <div class="col-lg-12 text-center">
-
-  
-                <svg width="500" height="130">
-                 <circle cx="50" cy="55" r="50"
-                    fill="rgb(51, 204, 51)" stroke="rgb(0, 153, 51)" stroke-width="5"/>
-                      <text x="45" y="50"
-                         font-family="sans-serif"
-                         font-size="20px"
-                         text-anchor="middle"
-                         fill="white">     Completed:       {{stats.complete_requests}}
-                        </text>
-
-                <circle cx="135" cy="45" r="40"
-                    fill="rgb(204, 51, 0)" stroke="rgb(153, 0, 0)" stroke-width="5"/>
-                      <text x="135" y="50"
-                         font-family="sans-serif"
-                         font-size="20px"
-                         text-anchor="middle"
-                         fill="white">            {{stats.failed_requests}}
-                        </text>
-                </svg>
-
-            </div>
-
-       
-          {{stats.transfer_rate}}
-
-        </div>
-
-        <div class="container box col-md-8 col-md-offset-2" id="">
-            <div ></div>
-
-        </div>
-    </div> -->

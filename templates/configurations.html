@@ -11,40 +11,40 @@
              <div class="col-lg-6 col-md-offset-3 text-center ">
                 <form id="add-configuration-form">
             
-                  <div class="form-group">
+<!--                   <div class="form-group">
                       <label for="exampleInputEmail1">Configuration ID</label>
-                      <input  class="form-control" name="configName" ng-model="configId" id="" placeholder="Configuration ID...">
-                  </div>
+                      <input  class="form-control" name="configName" ng-model="config.configId" id="" placeholder="Configuration ID...">
+                  </div> -->
                   <div class="form-group">
                       <label>Host name</label>
-                      <input  class="form-control" name= "hostName" ng-model="hostName" id="" placeholder="Host name...">
+                      <input  class="form-control" name= "hostName" ng-model="config.hostName" id="" placeholder="Host name...">
                   </div>
                   <div class="form-group">
                     <div class="col-md-6">
                       <label>Path</label>
-                      <input  class="form-control" name= "path" ng-model="path" id="pathInput" placeholder="Path...">
+                      <input  class="form-control" name= "path" ng-model="config.path" id="pathInput" placeholder="Path...">
                     </div>
                     <div class="col-md-6">
                        <label>Target Path</label>
-                      <input  class="form-control" name= "targetPath" ng-model="targetPath" id="targetPathInput" placeholder="Target path...">
+                      <input  class="form-control" name= "targetPath" ng-model="config.targetPath" id="targetPathInput" placeholder="Target path...">
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-md-6">
                       <label>Requests Per Seconds</label>
-                      <input  class="form-control" name= "reqPerSecond" ng-model="reqPerSecond" id="" placeholder="Request per seconds...">
+                      <input  class="form-control" name= "reqPerSecond" ng-model="config.reqPerSecond" id="" placeholder="Request per seconds...">
                     </div>
                     <div class="col-md-6">
                        <label>Concurrency</label>
-                      <input  class="form-control" name= "concurrency" ng-model="concurrency" id="" placeholder="Concurrency...">
+                      <input  class="form-control" name= "concurrency" ng-model="config.concurrency" id="" placeholder="Concurrency...">
                     </div>
                   </div>
                   <label id="backendServerFormLabel">Backend Servers</label>
                   <div class="form-group" id="backend-servers">
                       <addbackendserverinput></addbackendserverinput>
-                      <input  class="form-control" name= "backendServer" ng-model="backendServer1" id="backendServerInput1" placeholder="Enter backend server name...">
+                      <input  class="form-control backendServerInput" name= "backendServer" ng-model="config.backendServer1" id="backendServerInput1" placeholder="Enter backend server name...">
                   </div>
-                    <button class="btn btn-primary btn-md" id="showRequestsGraph" ng-click="">
+                    <button class="btn btn-primary btn-md" id="" ng-click="addConfiguration(config)">
                         <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
                         Save
                     </button>
