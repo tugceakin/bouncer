@@ -23,6 +23,8 @@ bouncerApp.factory('configuration', function ($http, $interval) {
        addConfiguration: function($scope, config, backendServerCount){
 
         var url = "http://localhost:8080/addConfiguration";
+        if(config.targetPath == undefined) config.targetPath = ""
+        if(config.path == undefined) config.path = ""
         var config = {
             //"id": config.configId,
             "host": config.hostName,
@@ -42,6 +44,19 @@ bouncerApp.factory('configuration', function ($http, $interval) {
             data: JSON.stringify(config)
         }).success(function (data) {
             console.log(JSON.stringify(data));
+        });
+       },
+
+       getAllConfigs: function($scope){
+        console.log("in get all c");
+        var url = "http://localhost:8080/getAllConfigs";
+        $http({
+            method: 'POST',
+            url: url,
+            headers: {'Content-Type': 'application/json'}
+        }).success(function (data) {
+            console.log(JSON.stringify(data));
+            $scope.configs = data;
         });
        }
    }

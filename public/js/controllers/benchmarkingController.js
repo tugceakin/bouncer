@@ -12,17 +12,24 @@ bouncerApp.controller('BenchmarkingController', function($scope, $interval, $htt
     $scope.statsShown = false;
     $scope.currentConfigId = 1;
     $scope.backendServers = [];
+    //$scope.configs = [];
 
     benchmarking.setSocketConnection;
     benchmarking.resetGraph($scope);
     benchmarking.onGraphLineClick($scope);
 
 
+    configuration.getAllConfigs($scope);
+
     $scope.startBenchmarking = function(){
         benchmarking.resetGraph($scope);
         benchmarking.updateGraph($scope);
+        console.log($scope.configs);
         //$scope.stats = benchmarking.getBenchmarkingStats();
     }
+
+        
+    
 
     $scope.closeConnection = function(){
         benchmarking.closeConnection();

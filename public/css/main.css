@@ -135,7 +135,7 @@ nav li a, #dropdown-menu{
     margin-bottom: 20px;
  }
 
-.backend-server-input, #backendServerFormLabel, .configuration-tabs{
+.backend-server-input, #backendServerFormLabel, .configuration-tabs, #showRequestsGraph, #config-select{
     margin-top: 10px;
 }
 

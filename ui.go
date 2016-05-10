@@ -13,6 +13,16 @@ var connections map[*websocket.Conn]bool
 var statChan chan GlobalStatRecord
 var configStore ConfigStore
 
+func getAllConfigs(w http.ResponseWriter, r *http.Request) {
+	allConfigs := configStore.GetAllConfigs()
+
+	j, err := json.Marshal(allConfigs)
+	if err != nil {
+		panic(err)
+	}
+	w.Write(j)
+}
+
 func addConfiguration(w http.ResponseWriter, r *http.Request) {
 	var benchmarkMap map[string]interface{}
 
@@ -31,7 +41,6 @@ func addConfiguration(w http.ResponseWriter, r *http.Request) {
 
 	concurrency, _ := strconv.Atoi(benchmarkMap["concurrency"].(string))
 	reqPerSecond, _ := strconv.Atoi(benchmarkMap["reqPerSecond"].(string))
-
 	config := NewConfig(benchmarkMap["host"].(string), backendServerArr, benchmarkMap["path"].(string), benchmarkMap["targetPath"].(string), concurrency, reqPerSecond)
 	configStore.AddConfig(&config)
 }
@@ -114,5 +123,6 @@ func UIServer() {
 
 	log.Println("listening on", listen)
 	http.HandleFunc("/addConfiguration", addConfiguration)
+	http.HandleFunc("/getAllConfigs", getAllConfigs)
 	http.ListenAndServe(listen, nil)
 }
