@@ -152,6 +152,10 @@ func (p *ReverseProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	config, backendServer := p.Director(outreq)
+	if config == nil && backendServer == nil {
+		rw.WriteHeader(503)
+		return
+	}
 	outreq.Proto = "HTTP/1.1"
 	outreq.ProtoMajor = 1
 	outreq.ProtoMinor = 1
@@ -221,7 +225,7 @@ func (p *ReverseProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	res.Body.Close() // close now, instead of defer, to populate res.Trailer
 	copyHeader(rw.Header(), res.Trailer)
 	elapsed := time.Since(startTime)
-	go recordStat(res, elapsed)
+	go recordStat(config, res, elapsed)
 	go func() {
 		config.NextBackendServer <- *backendServer
 	}()

@@ -9,7 +9,7 @@ import (
 var defaultConfig *Config
 
 func main() {
-	globalStatSink = make(chan GlobalStatRecord)
+	globalStatSink = make(chan GlobalStatRecord, 10)
 	globalStatSinkSubscribers = make([]chan GlobalStatRecord, 0)
 	proxy := &ReverseProxy{Director: director}
 	config := NewConfig(
@@ -20,6 +20,8 @@ func main() {
 		10,
 		200)
 	defaultConfig = &config
+	configCurrentStats = make(map[*Config]*CurrentStats)
+	configStatSubscribers = make(map[*Config][]chan GlobalStatRecord)
 	go statProcessor()
 	go GlobalStatBroadcaster()
 	go reqsPrinter()

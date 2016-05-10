@@ -74,9 +74,9 @@ func (a *HostConfigs) AddConfig(config *Config) {
 
 func (a *HostConfigs) RemoveConfig(config *Config) {
 	a.mutex.Lock()
-	for indx, val := range a.configs {
+	for index, val := range a.configs {
 		if val.Path == config.Path {
-			a.configs = append(a.configs[:indx], a.configs[indx+1:]...)
+			a.configs = append(a.configs[:index], a.configs[index+1:]...)
 			break
 		}
 	}
@@ -136,4 +136,22 @@ func (a ConfigStore) Match(target *url.URL) *Config {
 		return val.Match(target.Path)
 	}
 	return config
+}
+
+func (a ConfigStore) GetAllConfigs() []*Config {
+	var configs []*Config
+	for _, val := range a {
+		configs = append(configs, val.configs...)
+	}
+	return configs
+}
+
+func (a ConfigStore) GetAllHostConfigs(host string) []*Config {
+	var configs []*Config
+	for key, val := range a {
+		if key == host {
+			configs = append(configs, val.configs...)
+		}
+	}
+	return configs
 }
