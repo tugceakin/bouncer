@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"sort"
 	"sync"
+	"time"
 )
 
 type Config struct {
@@ -16,7 +17,9 @@ type Config struct {
 	MaxConcurrentPerBackendServer int
 	BackendServers                []BackendServer
 	NextBackendServer             chan BackendServer `json:"-"`
-	done                          chan struct{}      `json:"-"`
+	quitBootstrap                 chan struct{}      `json:"-"`
+	Throttle                      chan struct{}      `json:"-"`
+	quitRatelimit                 chan struct{}      `json:"-"`
 }
 
 type BackendServer struct {
@@ -25,29 +28,64 @@ type BackendServer struct {
 	ConfigId int
 }
 
-func (config *Config) BackendServerBootstrapRoutine() {
+func (config *Config) BackendServerBootstrapRoutine(quit chan struct{}) {
 	for i := 0; i < config.MaxConcurrentPerBackendServer; i++ {
 		for _, next := range config.BackendServers {
-			config.NextBackendServer <- next
+			select {
+			case <-quit:
+				return
+			case config.NextBackendServer <- next:
+			}
 		}
 	}
 }
 
+func (config *Config) RateLimiterRoutine(quit chan struct{}) {
+	rem := config.ReqPerSecond
+	ticker := time.NewTicker(1 * time.Second)
+	for {
+		select {
+		case <-ticker.C:
+			rem = config.ReqPerSecond
+		case <-quit:
+			return
+		case config.Throttle <- struct{}{}:
+			rem--
+			if rem <= 1 {
+				<-ticker.C
+				rem = config.ReqPerSecond
+			}
+		}
+	}
+}
+
+func (config *Config) Reload() {
+	config.Destroy()
+	config.quitRatelimit = make(chan struct{}, 1)
+	config.quitBootstrap = make(chan struct{}, 1)
+	go config.BackendServerBootstrapRoutine(config.quitBootstrap)
+	go config.RateLimiterRoutine(config.quitRatelimit)
+}
+
 func (config *Config) Destroy() {
-	config.done <- struct{}{}
+	config.quitBootstrap <- struct{}{}
+	config.quitRatelimit <- struct{}{}
 }
 
 func NewConfig(hostname string, backendServers []BackendServer, path string, targetPath string, concurrency int, reqPerSecond int) Config {
 	var config Config
 	config.BackendServers = backendServers
 	config.NextBackendServer = make(chan BackendServer, concurrency)
-	config.done = make(chan struct{})
+	config.quitRatelimit = make(chan struct{}, 1)
+	config.quitBootstrap = make(chan struct{}, 1)
+	config.Throttle = make(chan struct{}, 1)
 	config.MaxConcurrentPerBackendServer = concurrency
 	config.ReqPerSecond = reqPerSecond
 	config.Path = path
 	config.TargetPath = targetPath
 	config.Host = hostname
-	go config.BackendServerBootstrapRoutine()
+	go config.BackendServerBootstrapRoutine(config.quitBootstrap)
+	go config.RateLimiterRoutine(config.quitRatelimit)
 	return config
 }
 

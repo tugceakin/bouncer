@@ -39,7 +39,7 @@
             <h2>Requests Per Second</h2>
             <div class="panel panel-default">
               <div class="panel-body">
-                  <canvas id="line" class="chart chart-line" chart-data="reqPerSecData" chart-labels="reqPerSecLabels"
+                  <canvas id="line" chart-type="line" class="chart chart-line" chart-data="reqPerSecData" chart-labels="reqPerSecLabels"
                           chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
                           fillColor: 'rgba(63, 127, 191, 0)',
                           strokeColor: 'rgba(63, 127, 191,0.8)',
@@ -60,7 +60,7 @@
             <div class="panel panel-default">
               <div class="panel-body">
                 <canvas id="line" class="chart chart-line" chart-data="respTimeData" chart-labels="respTimeLabels"
-                        chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
+                        chart-legend="false" chart-series="series" animation="false" chart-click="onClick" chart-colours="[{
                           fillColor: 'rgba(150,150,150, 0)',
                           strokeColor: 'rgba(150,150,150,1)',
                           pointColor: 'rgba(150,150,150,1)',

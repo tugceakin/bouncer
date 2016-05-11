@@ -26,11 +26,15 @@ func main() {
 	go GlobalStatBroadcaster()
 	go reqsPrinter()
 	go UIServer()
+	defaultConfig.MaxConcurrentPerBackendServer = 20
+	defaultConfig.ReqPerSecond = 40
+	defaultConfig.Reload()
 	http.ListenAndServe(":9090", proxy)
 }
 
 func director(req *http.Request) (*Config, *BackendServer) {
 	config := defaultConfig
+	<-config.Throttle
 	select {
 	case next := <-config.NextBackendServer:
 		req.URL.Scheme = "http"
