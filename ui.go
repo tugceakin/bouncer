@@ -154,6 +154,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 		case socketConnection := <-quit: //Put an empty struct?
 			delete(connections, socketConnection)
+			UnsubscribeConfigStats(defaultConfig, nc)
 			socketConnection.Close()
 			return
 

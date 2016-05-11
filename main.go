@@ -13,7 +13,6 @@ var configStore ConfigStore
 func main() {
 	configStore = make(ConfigStore)
 	globalStatSink = make(chan GlobalStatRecord, 10)
-	globalStatSinkSubscribers = make([]chan GlobalStatRecord, 0)
 	proxy := &ReverseProxy{Director: director}
 	config := NewConfig(
 		"localhost:9090",
@@ -24,7 +23,8 @@ func main() {
 		200)
 	defaultConfig = &config
 	configCurrentStats = make(map[*Config]*CurrentStats)
-	configStatSubscribers = make(map[*Config][]chan GlobalStatRecord)
+	globalStatSubscribers.Init()
+	configStatSubscribers.Init()
 	go statProcessor()
 	go GlobalStatBroadcaster()
 	go reqsPrinter()
