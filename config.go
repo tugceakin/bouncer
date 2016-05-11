@@ -15,8 +15,8 @@ type Config struct {
 	ReqPerSecond                  int
 	MaxConcurrentPerBackendServer int
 	BackendServers                []BackendServer
-	NextBackendServer             chan BackendServer
-	done                          chan struct{}
+	NextBackendServer             chan BackendServer `json:"-"`
+	done                          chan struct{}      `json:"-"`
 }
 
 type BackendServer struct {
@@ -46,6 +46,7 @@ func NewConfig(hostname string, backendServers []BackendServer, path string, tar
 	config.ReqPerSecond = reqPerSecond
 	config.Path = path
 	config.TargetPath = targetPath
+	config.Host = hostname
 	go config.BackendServerBootstrapRoutine()
 	return config
 }

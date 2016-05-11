@@ -7,32 +7,17 @@
     <div class="row">
         <div class="col-lg-6 col-md-offset-3 text-center ">
 
-            <form id="benchmarking-form" ng-show="graphOff">
-        
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Configuration name</label>
-                  <input  class="form-control" name="configName" ng-model="configName" id="item1" placeholder="Enter configuration name...">
-              </div>
-              <div class="form-group">
-                  <label for="exampleInputPassword1">Host name</label>
-                  <input  class="form-control" name= "hostName" ng-model="hostName" id="item2" placeholder="Enter host name...">
-              </div>
-              <div class="form-group">
-                  <label for="exampleInputPassword1">Port</label>
-                  <input  class="form-control" name= "port" ng-model="port" id="item2" placeholder="Enter port number...">
-              </div>
+            <select ng-model="selectedConfig" class="form-control" id="config-select" ng-options="c.Host for c in configs"></select>
 
-  <!--             <button type="submit" class="btn btn-primary submitButton" ng-click="submit()" >Submit</button> -->
-            </form>
-            <button class="btn btn-success btn-lg" id="showRequestsGraph" ng-show="graphOff" ng-click="startBenchmarking()">
+            <button class="btn btn-success btn-md" id="showRequestsGraph" ng-show="graphOff" ng-click="startBenchmarking()">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 Start
             </button>
 
-            <button class="btn btn-primary btn-lg" id="" ng-show="benchmarkCompleted" ng-click="getBenchmarkingStats()">
+<!--             <button class="btn btn-primary btn-lg" id="" ng-show="benchmarkCompleted" ng-click="getBenchmarkingStats()">
                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                 Stats
-            </button>
+            </button> -->
 
 
             <div class="spinner" ng-hide="graphOff">
@@ -124,52 +109,3 @@
 
   </div>
   </div>
-
-
-
-
-
-<!-- TODO: Static Stats Using D3.js -->
-
-<!--     <div class="col-md-6 col-md-offset-3" ng-show="statsShown">
-        <h1>Stats</h1>
-        <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
-    </div>
-    <div class="container box col-md-6 col-md-offset-3 statsContainer" ng-show="statsShown">
-
-        <div class="row">
-            <div class="col-lg-12 text-center">
-
-  
-                <svg width="500" height="130">
-                 <circle cx="50" cy="55" r="50"
-                    fill="rgb(51, 204, 51)" stroke="rgb(0, 153, 51)" stroke-width="5"/>
-                      <text x="45" y="50"
-                         font-family="sans-serif"
-                         font-size="20px"
-                         text-anchor="middle"
-                         fill="white">     Completed:       {{stats.complete_requests}}
-                        </text>
-
-                <circle cx="135" cy="45" r="40"
-                    fill="rgb(204, 51, 0)" stroke="rgb(153, 0, 0)" stroke-width="5"/>
-                      <text x="135" y="50"
-                         font-family="sans-serif"
-                         font-size="20px"
-                         text-anchor="middle"
-                         fill="white">            {{stats.failed_requests}}
-                        </text>
-                </svg>
-
-            </div>
-
-       
-          {{stats.transfer_rate}}
-
-        </div>
-
-        <div class="container box col-md-8 col-md-offset-2" id="">
-            <div ></div>
-
-        </div>
-    </div> -->

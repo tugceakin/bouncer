@@ -3,7 +3,7 @@
  */
 //var bouncerApp = angular.module('bouncerApp', ['chart.js', 'ngRoute'])
 
-var bouncerApp = angular.module('bouncerApp', ['chart.js', 'ngRoute', 'ngAnimate', 'uiSwitch'])
+var bouncerApp = angular.module('bouncerApp', ['chart.js', 'ngRoute', 'ngAnimate', 'uiSwitch', 'ui.bootstrap'])
 
     .config(function ($routeProvider) {
     $routeProvider.
@@ -15,12 +15,8 @@ var bouncerApp = angular.module('bouncerApp', ['chart.js', 'ngRoute', 'ngAnimate
         templateUrl: 'benchmarking.html',
         controller: 'BenchmarkingController'
     }).
-    when('/page1', {
-        templateUrl: 'page1.html',
-        controller: 'ApiController'
-    }).
-    when('/page2', {
-        templateUrl: 'page2.html',
-        controller: 'ApiController'
+    when('/configurations', {
+        templateUrl: 'configurations.html',
+        controller: 'ConfigurationController'
     })
 });

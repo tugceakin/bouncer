@@ -2,24 +2,24 @@
  * Created by tugceakin on 4/8/16.
  */
 
-bouncerApp.controller('BenchmarkingController', function($scope, $interval, $http, benchmarking) {
-    $scope.pageClass = 'page-benchmarking';
-
+bouncerApp.controller('BenchmarkingController', function($scope, $interval, $http, $parse, benchmarking, configuration) {
     $scope.graphOff = true;
     $scope.benchmarkCompleted = false;
     $scope.benchmarkInput = "";
     $scope.stats = {};
     $scope.statsShown = false;
+    $scope.currentConfigId = 1;
+    $scope.backendServers = [];
 
     benchmarking.setSocketConnection;
     benchmarking.resetGraph($scope);
     benchmarking.onGraphLineClick($scope);
 
+    configuration.getAllConfigs($scope);
 
     $scope.startBenchmarking = function(){
         benchmarking.resetGraph($scope);
         benchmarking.updateGraph($scope);
-        //$scope.stats = benchmarking.getBenchmarkingStats();
     }
 
     $scope.closeConnection = function(){
@@ -34,5 +34,6 @@ bouncerApp.controller('BenchmarkingController', function($scope, $interval, $htt
             $scope.statsShown = false;
         }
     }
+
 
 });
