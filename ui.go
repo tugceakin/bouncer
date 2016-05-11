@@ -177,14 +177,14 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 func UIServer() {
 	connections = make(map[*websocket.Conn]bool)
 	//Test
-	config := NewConfig(
-		"localhost:9090",
-		[]BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")},
-		"abc",
-		"",
-		13,
-		250)
-	configStore.AddConfig(&config)
+	// config := NewConfig(
+	// 	"localhost:9090",
+	// 	[]BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")},
+	// 	"abc",
+	// 	"",
+	// 	13,
+	// 	250)
+	// configStore.AddConfig(&config)
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public/"))))
 	http.Handle("/", http.FileServer(http.Dir("./templates/")))
