@@ -100,6 +100,7 @@ func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn, ne
 			log.Println("quittt  config listener")
 			arr := strings.Split(string(msg), ",")
 			config := configStore.GetConfig(arr[1], arr[2])
+			quit <- conn
 			UnsubscribeConfigStats(config, nc)
 		} else { //Get host  and path
 			log.Println(string(msg))

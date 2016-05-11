@@ -45,8 +45,8 @@ bouncerApp.controller('BenchmarkingController', function($scope, $interval, $htt
         if(this.selectedConfig != null){
             //$scope.currentConfig = config;
             benchmarking.resetGraph($scope);
-            benchmarking.sendConnection($scope, this.selectedConfig);
-            benchmarking.updateGraph($scope);
+            benchmarking.updateGraph($scope, this.selectedConfig);
+            //benchmarking.sendConnection($scope, this.selectedConfig);
         }
 
     }

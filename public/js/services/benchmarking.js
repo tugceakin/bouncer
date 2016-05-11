@@ -23,6 +23,12 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
         //conn.send("start");
     }
 
+    var sendConnection = function($scope, config){
+      if(config != undefined && config.Host != undefined){ 
+        conn.send(config.Host + "," + config.Path);
+      }
+    }
+
    return {
        onGraphLineClick: function($scope) {
           $scope.onClick = function (points, evt) {
@@ -52,7 +58,7 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
           ];
        },
 
-       updateGraph: function($scope){
+       updateGraph: function($scope, config){
           var timeCounter = 0;
 
           $scope.benchmarkCompleted = false;
@@ -67,7 +73,7 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
           };
 
           conn.onopen = function(e) {
-              startConnection($scope);
+              sendConnection($scope, config);
           };
 
           // called when a message is received from the server
@@ -124,6 +130,7 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
         console.log(config);
           if(config != undefined && config.Host != undefined){ 
             conn.send("quit," + config.Host + "," + config.Path);
+            console.log("quit n default");
           } 
           else { //Default config
             conn.send("quit,default");
