@@ -194,3 +194,15 @@ func (a ConfigStore) GetAllHostConfigs(host string) []*Config {
 	}
 	return configs
 }
+
+func (a ConfigStore) GetConfig(host, path string) *Config {
+	var config *Config
+	if val, ok := a[host]; ok {
+		for _, conf := range val.configs {
+			if conf.Path == path {
+				return conf
+			}
+		}
+	}
+	return config
+}
