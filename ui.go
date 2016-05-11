@@ -2,11 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/gorilla/websocket"
 )
 
 var connections map[*websocket.Conn]bool
@@ -140,6 +141,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		case socketConnection := <-quit: //Put an empty struct?
 			delete(connections, socketConnection)
+			UnsubscribeConfigStats(defaultConfig, nc)
 			socketConnection.Close()
 			return
 		}
