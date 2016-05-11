@@ -11,7 +11,7 @@
                   <div class="form-group">
                     <div class="col-md-6">
                       <label>Path</label>
-                      <input  class="form-control" name= "path" ng-model="config.path" id="pathInput" placeholder="Path...">
+                      <input class="form-control" name= "path" ng-disabled="updateMode" ng-model="config.path" id="pathInput" placeholder="Path...">
                     </div>
                     <div class="col-md-6">
                        <label>Target Path</label>
@@ -33,7 +33,11 @@
                       <addbackendserverinput></addbackendserverinput>
                       <input  class="form-control backendServerInput" name= "backendServer" ng-model="config.backendServer1" id="backendServerInput1" placeholder="Enter backend server name...">
                   </div>
-                  <button class="btn btn-success btn-md" id="updateButton" ng-click="addConfiguration(config)">
+                    <button class="btn btn-danger btn-md" id="resetButton" ng-click="reload()">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        Reset
+                    </button>
+                    <button class="btn btn-success btn-md" id="updateButton" ng-click="addConfiguration(config)">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         Add
                     </button>

@@ -148,6 +148,6 @@ nav li a, #dropdown-menu{
     margin-left: 10px;
 }
 
-#saveButton, #updateButton {
+#saveButton, #updateButton, #resetButton {
     width: 100px;
 }

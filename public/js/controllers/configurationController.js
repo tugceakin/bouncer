@@ -1,10 +1,11 @@
-bouncerApp.controller('ConfigurationController', function($scope, $http, $window, $timeout, benchmarking, configuration) {
+bouncerApp.controller('ConfigurationController', function($scope, $http, $window, $timeout, $route, benchmarking, configuration) {
 
     $scope.backendServerCount = 1;
     $scope.selection = {};
     $scope.currentConfig = {};
     $scope.addAlertMessage = false;
     $scope.updateAlertMessage = false;
+    $scope.updateMode = false;
 
     configuration.getAllConfigs($scope);
     $scope.addConfiguration = function(config){
@@ -33,9 +34,15 @@ bouncerApp.controller('ConfigurationController', function($scope, $http, $window
         configuration.getAllConfigs($scope);
     };
 
+    $scope.reload = function(){
+        $route.reload();
+    }
+
     $scope.configurationSelected = function(config){
         console.log(this.config);
         console.log(this.selection);
+
+        $scope.updateMode = true;
         if(this.selection != null){
             $scope.currentConfig = this.selection;
             this.config.concurrency = this.selection.MaxConcurrentPerBackendServer;
