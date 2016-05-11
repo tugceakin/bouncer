@@ -52,7 +52,25 @@
             </div>
             </uib-tab>
             <uib-tab index="1" heading="Update">Update Configuration</uib-tab>
-            <uib-tab index="2" heading="Remove">Remove Configuration</uib-tab>
+            <uib-tab index="2" heading="Remove">
+            <table class="table table-striped" id="remove-configs-table">
+                <tr>
+                  <th class="center">Host</th>
+                  <th class="center">Path</th>
+                  <th class="center"></th>
+                </tr>
+                    <tr ng-repeat="c in configs track by $index">
+                      <td >{{c.Host}}</td>
+                      <td>{{c.Path}}</td>
+                      <td>         
+                       <button class="btn btn-danger btn-md" ng-click="removeConfiguration(c)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+              </table>
+            </uib-tab>
           </uib-tabset>
         </div>
     </div>

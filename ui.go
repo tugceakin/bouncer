@@ -15,12 +15,32 @@ var configStore ConfigStore
 
 func getAllConfigs(w http.ResponseWriter, r *http.Request) {
 	allConfigs := configStore.GetAllConfigs()
-
 	j, err := json.Marshal(allConfigs)
 	if err != nil {
 		panic(err)
 	}
 	w.Write(j)
+}
+
+func removeConfiguration(w http.ResponseWriter, r *http.Request) {
+	var configMap map[string]interface{}
+
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&configMap)
+	if err != nil {
+		panic(err)
+	}
+
+	allConfigs := configStore.GetAllConfigs()
+	for _, v := range allConfigs {
+		if v.Path == configMap["path"].(string) && v.TargetPath == configMap["target"].(string) {
+			configStore.RemoveConfig(v)
+		}
+		// log.Println(k)
+		// log.Println(v.)
+	}
+
+	//configStore.RemoveConfig(config)
 }
 
 func addConfiguration(w http.ResponseWriter, r *http.Request) {
@@ -55,8 +75,21 @@ func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn) {
 		}
 		if string(msg) == "quit" {
 			quit <- conn
+		} else { //Get host name
+			log.Println(string(msg))
+			log.Println("got message")
 		}
 	}
+}
+
+func updateStats(quit chan *websocket.Conn, nc chan GlobalStatRecord) {
+	//Test.
+	// proxy := &ReverseProxy{Director: director}
+	// config := NewConfig("localhost:9094", []BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")}, "", "", 10, 200)
+	// configStore.AddConfig(&config)
+	// defaultConfig = &config
+
+	// go http.ListenAndServe("localhost:9094"[len("localhost:9094")-5:], proxy)
 }
 
 func socketHandler(w http.ResponseWriter, r *http.Request) {
@@ -73,9 +106,15 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	connections[conn] = true
 
 	quit := make(chan *websocket.Conn)
+	nc := make(chan GlobalStatRecord)
+	SubscribeConfigStats(defaultConfig, nc)
+	// for conn := range connections {
+	log.Println("in conn")
+	go closeConnectionListener(conn, quit)
 	for {
 		select {
-		case astat := <-globalStatSink:
+		//case astat := <-globalStatSink:
+		case astat := <-nc:
 			newStatsMap := make(map[string]interface{})
 			statusCountsMap := make(map[string]int)
 
@@ -91,8 +130,9 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 			jsonStr, _ := json.Marshal(newStatsMap)
 
+			log.Println(len(connections))
 			for conn := range connections {
-				go closeConnectionListener(conn, quit)
+				//go closeConnectionListener(conn, quit)
 				if err := conn.WriteMessage(websocket.TextMessage, []byte(jsonStr)); err != nil {
 					delete(connections, conn)
 					conn.Close()
@@ -104,6 +144,8 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	//}
+
 }
 
 func UIServer() {
@@ -123,6 +165,7 @@ func UIServer() {
 
 	log.Println("listening on", listen)
 	http.HandleFunc("/addConfiguration", addConfiguration)
+	http.HandleFunc("/removeConfiguration", removeConfiguration)
 	http.HandleFunc("/getAllConfigs", getAllConfigs)
 	http.ListenAndServe(listen, nil)
 }

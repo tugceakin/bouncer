@@ -19,6 +19,9 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
         }
 
 
+    var startConnection = function($scope){
+        //conn.send("start");
+    }
 
    return {
        onGraphLineClick: function($scope) {
@@ -65,9 +68,7 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
           };
 
           conn.onopen = function(e) {
-              $scope.$apply(function(){
-                  $scope.messages.push("CONNECTED");
-              })
+              startConnection($scope);
           };
 
           // called when a message is received from the server

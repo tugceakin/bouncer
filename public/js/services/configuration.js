@@ -14,7 +14,6 @@ bouncerApp.factory('configuration', function ($http, $interval) {
           backendServers.push(backendServer);
           console.log(backendServer);
       }
-      console.log(backendServers.length);
       return backendServers;
   };
 
@@ -47,8 +46,19 @@ bouncerApp.factory('configuration', function ($http, $interval) {
         });
        },
 
+       removeConfiguration: function($scope, config){
+          var url = "http://localhost:8080/removeConfiguration";
+          $http({
+              method: 'POST',
+              url: url,
+              headers: {'Content-Type': 'application/json'}, 
+              data: JSON.stringify(config)
+          }).success(function (data) {
+              console.log(JSON.stringify(data));
+          });
+       },
+
        getAllConfigs: function($scope){
-        console.log("in get all c");
         var url = "http://localhost:8080/getAllConfigs";
         $http({
             method: 'POST',
