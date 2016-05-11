@@ -120,8 +120,14 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
           conn.send(config.Host + "," + config.Path);
        },
 
-       closeConnection: function(){
-        conn.send("quit");
+       closeConnection: function(config){
+        console.log(config);
+          if(config != undefined && config.Host != undefined){ 
+            conn.send("quit," + config.Host + "," + config.Path);
+          } 
+          else { //Default config
+            conn.send("quit,default");
+          }
        },
 
        getBenchmarkingStats: function($scope){

@@ -81,7 +81,7 @@ func addConfiguration(w http.ResponseWriter, r *http.Request) {
 	configStore.AddConfig(&config)
 }
 
-func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn, newConfig chan *Config) {
+func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn, newConfig chan *Config, nc chan GlobalStatRecord) {
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
@@ -90,8 +90,17 @@ func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn, ne
 			return
 		}
 
-		if string(msg) == "quit" {
+		//nc := make(chan GlobalStatRecord)
+		log.Println(string(msg)[0:5])
+		log.Println(string(msg))
+		if string(msg) == "quit,default" {
 			quit <- conn
+			UnsubscribeConfigStats(defaultConfig, nc)
+		} else if string(msg)[0:5] == "quit," {
+			log.Println("quittt  config listener")
+			arr := strings.Split(string(msg), ",")
+			config := configStore.GetConfig(arr[1], arr[2])
+			UnsubscribeConfigStats(config, nc)
 		} else { //Get host  and path
 			log.Println(string(msg))
 			arr := strings.Split(string(msg), ",")
@@ -120,7 +129,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	SubscribeConfigStats(defaultConfig, nc)
 	// for conn := range connections {
 	log.Println("in conn")
-	go closeConnectionListener(conn, quit, newConfig)
+	go closeConnectionListener(conn, quit, newConfig, nc)
 	for {
 		select {
 		//case astat := <-globalStatSink:
@@ -166,6 +175,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 func UIServer() {
 	connections = make(map[*websocket.Conn]bool)
+	//Test
 	config := NewConfig(
 		"localhost:9090",
 		[]BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")},

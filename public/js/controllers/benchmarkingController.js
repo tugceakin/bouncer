@@ -27,8 +27,8 @@ bouncerApp.controller('BenchmarkingController', function($scope, $interval, $htt
         benchmarking.updateGraph($scope);
     //}
 
-    $scope.closeConnection = function(){
-        benchmarking.closeConnection();
+    $scope.closeConnection = function(config){
+        benchmarking.closeConnection(this.selectedConfig);
         $scope.graphOff = true;
     }
 
