@@ -77,6 +77,7 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
                 var stats = JSON.parse(e.data);
                 console.log(e.data);
                
+               if(stats.endTime != $scope.statusLabels[$scope.statusLabels.length - 1]){
                 // Remove first element
                 $scope.reqPerSecLabels.splice(0,1);
                 $scope.reqPerSecData[0].splice(0,1);
@@ -105,6 +106,7 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
                   $scope.status404Data[0].push(0); 
                 }
                 $scope.status404Labels.push(stats.endTime);
+              }
               });
           };
           $scope.send = function() {

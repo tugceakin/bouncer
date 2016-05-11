@@ -20,7 +20,6 @@ bouncerApp.factory('configuration', function ($http, $interval) {
    return {
 
        addConfiguration: function($scope, config, backendServerCount){
-
         var url = "http://localhost:8080/addConfiguration";
         if(config.targetPath == undefined) config.targetPath = ""
         if(config.path == undefined) config.path = ""

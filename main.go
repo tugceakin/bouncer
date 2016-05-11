@@ -7,8 +7,10 @@ import (
 )
 
 var defaultConfig *Config
+var configStore ConfigStore
 
 func main() {
+	configStore = make(ConfigStore)
 	globalStatSink = make(chan GlobalStatRecord, 10)
 	globalStatSinkSubscribers = make([]chan GlobalStatRecord, 0)
 	proxy := &ReverseProxy{Director: director}

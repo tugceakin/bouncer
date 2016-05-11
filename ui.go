@@ -11,7 +11,6 @@ import (
 
 var connections map[*websocket.Conn]bool
 var statChan chan GlobalStatRecord
-var configStore ConfigStore
 
 func getAllConfigs(w http.ResponseWriter, r *http.Request) {
 	allConfigs := configStore.GetAllConfigs()
@@ -150,7 +149,6 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 func UIServer() {
 	connections = make(map[*websocket.Conn]bool)
-	configStore = make(ConfigStore)
 	log.Println(configStore) //I'm using this to escape from "not used" error. I don't know where else to assign configStore.
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public/"))))

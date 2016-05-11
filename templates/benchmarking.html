@@ -1,6 +1,5 @@
 <div class="col-md-6 col-md-offset-3 text-center">
-    <h1>Benchmarking</h1>
-    <p class="box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus varius pulvinar luctus.</p>
+    <h1>Monitoring</h1>
 </div>
 <div class="container box col-md-8 col-md-offset-2 graphContainer">
 
@@ -14,12 +13,6 @@
                 Start
             </button>
 
-<!--             <button class="btn btn-primary btn-lg" id="" ng-show="benchmarkCompleted" ng-click="getBenchmarkingStats()">
-                <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-                Stats
-            </button> -->
-
-
             <div class="spinner" ng-hide="graphOff">
                 <div class="bounce1"></div>
                 <div class="bounce2"></div>
@@ -27,7 +20,7 @@
             </div>
 
             <button class="btn btn-danger btn-lg" id="stopBenchmarking" ng-hide="graphOff" ng-click="closeConnection()">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
                 Stop
             </button>
 
@@ -40,7 +33,7 @@
             <div class="panel panel-default">
               <div class="panel-body">
                   <canvas id="line" class="chart chart-line" chart-data="reqPerSecData" chart-labels="reqPerSecLabels"
-                          chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
+                          chart-legend="false" chart-series="series" chart-options= "reqPerSeqOptions" chart-click="onClick" chart-colours="[{
                           fillColor: 'rgba(63, 127, 191, 0)',
                           strokeColor: 'rgba(63, 127, 191,0.8)',
                           pointColor: 'rgba(63, 127, 191, 1)',
@@ -60,7 +53,7 @@
             <div class="panel panel-default">
               <div class="panel-body">
                 <canvas id="line" class="chart chart-line" chart-data="respTimeData" chart-labels="respTimeLabels"
-                        chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
+                        chart-legend="false" chart-series="series" chart-click="onClick" chart-options= "responseTimeOptions" chart-colours="[{
                           fillColor: 'rgba(150,150,150, 0)',
                           strokeColor: 'rgba(150,150,150,1)',
                           pointColor: 'rgba(150,150,150,1)',
@@ -79,7 +72,7 @@
           <div class="panel panel-default">
             <div class="panel-body">
               <canvas id="line" class="chart chart-line" chart-data="statusData" chart-labels="statusLabels"
-                      chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
+                      chart-legend="false" chart-series="series" chart-click="onClick" chart-options= "status200Options" chart-colours="[{
                         fillColor: 'rgba(26,179,148,0)',
                         strokeColor: 'rgba(26,179,148,0.8)',
                         pointColor: 'rgba(6,179,148,1)',
@@ -96,7 +89,7 @@
           <div class="panel panel-default">
                 <div class="panel-body">
                   <canvas id="line" class="chart chart-line" chart-data="status404Data" chart-labels="status404Labels"
-                          chart-legend="false" chart-series="series" chart-click="onClick" chart-colours="[{
+                          chart-legend="false" chart-series="series" chart-click="onClick" chart-options= "status404Options" chart-colours="[{
                               fillColor: 'rgba(224, 108, 112, 0)',
                               strokeColor: 'rgba(207,100,103,1)',
                               pointColor: 'rgba(207,100,103,1)',
