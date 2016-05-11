@@ -193,6 +193,7 @@ func GlobalStatBroadcaster() {
 		} else {
 			for _, c := range configStatSubscribers.GetSubscribers(astat.Config) {
 				go func() {
+					log.Println("X", astat.Config.Path, astat)
 					c <- astat
 				}()
 			}
