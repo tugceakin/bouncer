@@ -78,35 +78,35 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
                 console.log(e.data);
                
                if(stats.endTime != $scope.statusLabels[$scope.statusLabels.length - 1]){
-                // Remove first element
-                $scope.reqPerSecLabels.splice(0,1);
-                $scope.reqPerSecData[0].splice(0,1);
-                $scope.reqPerSecData[0].push(stats.totalReq); 
-                $scope.reqPerSecLabels.push(stats.endTime);
+                  // Remove first element
+                  $scope.reqPerSecLabels.splice(0,1);
+                  $scope.reqPerSecData[0].splice(0,1);
+                  $scope.reqPerSecData[0].push(stats.totalReq); 
+                  $scope.reqPerSecLabels.push(stats.endTime);
 
-                $scope.respTimeLabels.splice(0,1);
-                $scope.respTimeData[0].splice(0,1);
-                $scope.respTimeData[0].push(stats.avgRespTime); 
-                $scope.respTimeLabels.push(stats.endTime);
+                  $scope.respTimeLabels.splice(0,1);
+                  $scope.respTimeData[0].splice(0,1);
+                  $scope.respTimeData[0].push(stats.avgRespTime); 
+                  $scope.respTimeLabels.push(stats.endTime);
 
-                $scope.statusLabels.splice(0,1);
-                $scope.statusData[0].splice(0,1);
-                if (stats.statusCount.hasOwnProperty('200')) {
-                  $scope.statusData[0].push(stats.statusCount["200"]); 
-                }else{
-                  $scope.statusData[0].push(0); 
+                  $scope.statusLabels.splice(0,1);
+                  $scope.statusData[0].splice(0,1);
+                  if (stats.statusCount.hasOwnProperty('200')) {
+                    $scope.statusData[0].push(stats.statusCount["200"]); 
+                  }else{
+                    $scope.statusData[0].push(0); 
+                  }
+                  $scope.statusLabels.push(stats.endTime);
+
+                  $scope.status404Labels.splice(0,1);
+                  $scope.status404Data[0].splice(0,1);
+                  if (stats.statusCount.hasOwnProperty('404')) {
+                    $scope.status404Data[0].push(stats.statusCount["404"]); 
+                  }else{
+                    $scope.status404Data[0].push(0); 
+                  }
+                  $scope.status404Labels.push(stats.endTime);
                 }
-                $scope.statusLabels.push(stats.endTime);
-
-                $scope.status404Labels.splice(0,1);
-                $scope.status404Data[0].splice(0,1);
-                if (stats.statusCount.hasOwnProperty('404')) {
-                  $scope.status404Data[0].push(stats.statusCount["404"]); 
-                }else{
-                  $scope.status404Data[0].push(0); 
-                }
-                $scope.status404Labels.push(stats.endTime);
-              }
               });
           };
           $scope.send = function() {

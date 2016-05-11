@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	_ "net/http/pprof"
 	"time"
@@ -29,7 +30,7 @@ func main() {
 	go reqsPrinter()
 	go UIServer()
 	defaultConfig.MaxConcurrentPerBackendServer = 20
-	defaultConfig.ReqPerSecond = 40
+	defaultConfig.ReqPerSecond = 10
 	defaultConfig.Reload()
 	http.ListenAndServe(":9090", proxy)
 }
@@ -37,6 +38,7 @@ func main() {
 func director(req *http.Request) (*Config, *BackendServer) {
 	config := defaultConfig
 	<-config.Throttle
+	log.Println("XX", config)
 	select {
 	case next := <-config.NextBackendServer:
 		req.URL.Scheme = "http"

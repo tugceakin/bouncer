@@ -6,12 +6,11 @@
     <div class="row">
         <div class="col-lg-6 col-md-offset-3 text-center ">
 
-            <select ng-model="selectedConfig" class="form-control" id="config-select" ng-options="c.Host for c in configs"></select>
-
-            <button class="btn btn-success btn-md" id="showRequestsGraph" ng-show="graphOff" ng-click="startBenchmarking()">
+            <select ng-model="selectedConfig" class="form-control" id="config-select" ng-options='(c.Host + "/" + c.Path) for c in configs'></select>
+<!--             <button class="btn btn-success btn-md" id="showRequestsGraph" ng-show="graphOff" ng-click="startBenchmarking()">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 Start
-            </button>
+            </button> -->
 
             <div class="spinner" ng-hide="graphOff">
                 <div class="bounce1"></div>
@@ -19,10 +18,10 @@
                 <div class="bounce3"></div>
             </div>
 
-            <button class="btn btn-danger btn-lg" id="stopBenchmarking" ng-hide="graphOff" ng-click="closeConnection()">
+<!--             <button class="btn btn-danger btn-lg" id="stopBenchmarking" ng-hide="graphOff" ng-click="closeConnection()">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>
                 Stop
-            </button>
+            </button> -->
 
         </div>
     </div>

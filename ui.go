@@ -33,6 +33,31 @@ func removeConfiguration(w http.ResponseWriter, r *http.Request) {
 	configStore.RemoveConfig(config)
 }
 
+func updateConfiguration(w http.ResponseWriter, r *http.Request) {
+	var configMap map[string]interface{}
+
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&configMap)
+	if err != nil {
+		panic(err)
+	}
+
+	config := configStore.GetConfig(configMap["host"].(string), configMap["path"].(string))
+	config.TargetPath = configMap["targetPath"].(string)
+	config.MaxConcurrentPerBackendServer = int(configMap["concurrency"].(float64))
+	config.ReqPerSecond = int(configMap["reqPerSecond"].(float64))
+	backendServerArr := make([]BackendServer, len(configMap["backendServers"].([]interface{})))
+
+	for k, v := range configMap["backendServers"].([]interface{}) {
+		backendServer := NewBackendServer(v.(map[string]interface{})["host"].(string))
+		backendServerArr[k] = backendServer
+	}
+	config.BackendServers = backendServerArr
+
+	configStore.UpdateConfig(config)
+	config.Reload()
+}
+
 func addConfiguration(w http.ResponseWriter, r *http.Request) {
 	var benchmarkMap map[string]interface{}
 
@@ -70,16 +95,6 @@ func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn) {
 			log.Println("got message")
 		}
 	}
-}
-
-func updateStats(quit chan *websocket.Conn, nc chan GlobalStatRecord) {
-	//Test.
-	// proxy := &ReverseProxy{Director: director}
-	// config := NewConfig("localhost:9094", []BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")}, "", "", 10, 200)
-	// configStore.AddConfig(&config)
-	// defaultConfig = &config
-
-	// go http.ListenAndServe("localhost:9094"[len("localhost:9094")-5:], proxy)
 }
 
 func socketHandler(w http.ResponseWriter, r *http.Request) {
@@ -140,9 +155,6 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 func UIServer() {
 	connections = make(map[*websocket.Conn]bool)
-	log.Println(configStore) //I'm using this to escape from "not used" error. I don't know where else to assign configStore.
-	config := NewConfig("localhost:9090", []BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")}, "zz", "", 10, 200)
-	configStore.AddConfig(&config)
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public/"))))
 	http.Handle("/", http.FileServer(http.Dir("./templates/")))
@@ -157,6 +169,7 @@ func UIServer() {
 	log.Println("listening on", listen)
 	http.HandleFunc("/addConfiguration", addConfiguration)
 	http.HandleFunc("/removeConfiguration", removeConfiguration)
+	http.HandleFunc("/updateConfiguration", updateConfiguration)
 	http.HandleFunc("/getAllConfigs", getAllConfigs)
 	http.ListenAndServe(listen, nil)
 }

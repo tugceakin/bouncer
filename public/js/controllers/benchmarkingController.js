@@ -10,7 +10,6 @@ bouncerApp.controller('BenchmarkingController', function($scope, $interval, $htt
     $scope.statsShown = false;
     $scope.currentConfigId = 1;
     $scope.backendServers = [];
-    $scope.config.hostName = "localhost:9090";
 
     benchmarking.setSocketConnection;
     benchmarking.resetGraph($scope);
@@ -31,10 +30,10 @@ bouncerApp.controller('BenchmarkingController', function($scope, $interval, $htt
           animation: false
     }
 
-    $scope.startBenchmarking = function(){
+    //$scope.startBenchmarking = function(){
         benchmarking.resetGraph($scope);
         benchmarking.updateGraph($scope);
-    }
+    //}
 
     $scope.closeConnection = function(){
         benchmarking.closeConnection();
