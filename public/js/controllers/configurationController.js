@@ -15,6 +15,11 @@ bouncerApp.controller('ConfigurationController', function($scope, $http, $window
 
     $scope.removeConfiguration = function(config){
         configuration.removeConfiguration($scope, config);
+        configuration.getAllConfigs($scope);
+    };
+
+    $scope.selectRemoveTab = function(){
+        configuration.getAllConfigs($scope);
     };
 
 });

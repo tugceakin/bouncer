@@ -46,6 +46,7 @@ bouncerApp.factory('configuration', function ($http, $interval) {
        },
 
        removeConfiguration: function($scope, config){
+        console.log(config);
           var url = "http://localhost:8080/removeConfiguration";
           $http({
               method: 'POST',
@@ -65,7 +66,9 @@ bouncerApp.factory('configuration', function ($http, $interval) {
             headers: {'Content-Type': 'application/json'}
         }).success(function (data) {
             console.log(JSON.stringify(data));
-            $scope.configs = data;
+            console.log(data);
+            if(data.length < 1 || data == "null" || data == null) $scope.configs = [];
+            else $scope.configs = data;
         });
        }
    }

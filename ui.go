@@ -29,17 +29,8 @@ func removeConfiguration(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-
-	allConfigs := configStore.GetAllConfigs()
-	for _, v := range allConfigs {
-		if v.Path == configMap["path"].(string) && v.TargetPath == configMap["target"].(string) {
-			configStore.RemoveConfig(v)
-		}
-		// log.Println(k)
-		// log.Println(v.)
-	}
-
-	//configStore.RemoveConfig(config)
+	config := configStore.GetConfig(configMap["Host"].(string), configMap["Path"].(string))
+	configStore.RemoveConfig(config)
 }
 
 func addConfiguration(w http.ResponseWriter, r *http.Request) {
@@ -150,6 +141,8 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 func UIServer() {
 	connections = make(map[*websocket.Conn]bool)
 	log.Println(configStore) //I'm using this to escape from "not used" error. I don't know where else to assign configStore.
+	config := NewConfig("localhost:9090", []BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")}, "zz", "", 10, 200)
+	configStore.AddConfig(&config)
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public/"))))
 	http.Handle("/", http.FileServer(http.Dir("./templates/")))
