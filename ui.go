@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var connections map[*websocket.Conn]bool
@@ -80,7 +81,7 @@ func addConfiguration(w http.ResponseWriter, r *http.Request) {
 	configStore.AddConfig(&config)
 }
 
-func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn) {
+func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn, newConfig chan *Config) {
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
@@ -88,11 +89,14 @@ func closeConnectionListener(conn *websocket.Conn, quit chan *websocket.Conn) {
 			conn.Close()
 			return
 		}
+
 		if string(msg) == "quit" {
 			quit <- conn
-		} else { //Get host name
+		} else { //Get host  and path
 			log.Println(string(msg))
-			log.Println("got message")
+			arr := strings.Split(string(msg), ",")
+			config := configStore.GetConfig(arr[0], arr[1])
+			newConfig <- config
 		}
 	}
 }
@@ -112,10 +116,11 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 	quit := make(chan *websocket.Conn)
 	nc := make(chan GlobalStatRecord)
+	newConfig := make(chan *Config)
 	SubscribeConfigStats(defaultConfig, nc)
 	// for conn := range connections {
 	log.Println("in conn")
-	go closeConnectionListener(conn, quit)
+	go closeConnectionListener(conn, quit, newConfig)
 	for {
 		select {
 		//case astat := <-globalStatSink:
@@ -143,10 +148,15 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 					conn.Close()
 				}
 			}
+		case config := <-newConfig:
+			nc := make(chan GlobalStatRecord)
+			SubscribeConfigStats(config, nc)
+
 		case socketConnection := <-quit: //Put an empty struct?
 			delete(connections, socketConnection)
 			socketConnection.Close()
 			return
+
 		}
 	}
 	//}
@@ -155,6 +165,14 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 func UIServer() {
 	connections = make(map[*websocket.Conn]bool)
+	config := NewConfig(
+		"localhost:9090",
+		[]BackendServer{NewBackendServer("localhost:9091"), NewBackendServer("localhost:9092")},
+		"abc",
+		"",
+		13,
+		250)
+	configStore.AddConfig(&config)
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public/"))))
 	http.Handle("/", http.FileServer(http.Dir("./templates/")))

@@ -60,11 +60,10 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
           this.resetGraph($scope);
 
           $scope.messages = [];
+
           conn = new WebSocket("ws://localhost:8080/ws");
           conn.onclose = function(e) {
-              $scope.$apply(function(){
-                  $scope.messages.push("DISCONNECTED");
-              });
+            console.log("closed")
           };
 
           conn.onopen = function(e) {
@@ -114,6 +113,11 @@ bouncerApp.factory('benchmarking', function ($http, $interval) {
               $scope.msg = "";
           }
 
+       },
+
+       sendConnection: function($scope, config){
+          console.log(config);
+          conn.send(config.Host + "," + config.Path);
        },
 
        closeConnection: function(){
